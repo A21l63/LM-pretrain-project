@@ -1,0 +1,29 @@
+experiment_name: hf_tokenizer_gru
+seed: 42
+data:
+  dataset_name: roneneldan/TinyStories
+  text_column: text
+  max_texts: 2000
+  validation_fraction: 0.1
+tokenizer:
+  type: hf
+  name: gpt2
+model:
+  type: gru
+  block_size: 128
+  d_model: 128
+  gru_hidden_size: 256
+  num_layers: 1
+  dropout: 0.1
+training:
+  batch_size: 16
+  max_steps: 1000
+  learning_rate: 0.0003
+  eval_interval: 100
+  grad_clip: 1.0
+  checkpoint_path: results/hf_tokenizer_gru.pt
+generation:
+  prompt: "Once upon a time"
+  max_new_tokens: 80
+  temperature: 0.9
+  top_k: 50
