@@ -13,7 +13,7 @@ class GRUBackbone(nn.Module):
     shape [B, T, D]. Add a projection if hidden_size != d_model.
     """
 
-    def __init__(self, d_model, hidden_size, num_layers=1, dropout=0.0):
+    def __init__(self, d_model: int, hidden_size: int, num_layers: int = 1, dropout: float = 0.0) -> None:
         super().__init__()
         self.d_model = d_model
         self.hidden_size = hidden_size
