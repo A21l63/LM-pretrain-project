@@ -24,7 +24,8 @@ class GRUBackbone(nn.Module):
         self.proj = nn.Linear(hidden_size, d_model) if hidden_size != d_model else nn.Identity()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        ...
+        out, _ = self.gru(x)
+        return self.proj(out)
 
 
 class TransformerBlock(nn.Module):
