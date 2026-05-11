@@ -13,20 +13,15 @@ class GRUBackbone(nn.Module):
     shape [B, T, D]. Add a projection if hidden_size != d_model.
     """
 
-    def __init__(
-        self,
-        d_model: int,
-        hidden_size: int,
-        num_layers: int = 1,
-        dropout: float = 0.0,
-    ) -> None:
+    def __init__(self, d_model, hidden_size, num_layers=1, dropout=0.0):
         super().__init__()
         self.d_model = d_model
         self.hidden_size = hidden_size
         self.num_layers = num_layers
         self.dropout = dropout
-        self.gru = ...
-        self.proj = ...
+        self.gru = nn.GRU(input_size=d_model, hidden_size=hidden_size, num_layers=num_layers, batch_first=True,
+                          dropout=dropout if num_layers > 1 else 0.0)
+        self.proj = nn.Linear(hidden_size, d_model) if hidden_size != d_model else nn.Identity()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         ...
