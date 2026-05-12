@@ -5,7 +5,6 @@ import pytest
 from src.tokenizers import CharTokenizer
 
 
-@pytest.mark.skip(reason="TODO(student): implement CharTokenizer first")
 def test_char_tokenizer_roundtrip() -> None:
     tokenizer = CharTokenizer()
     tokenizer.train(["hello", "world"])
