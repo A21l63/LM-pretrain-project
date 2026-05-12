@@ -22,8 +22,6 @@ class BaseTokenizer:
 
 class CharTokenizer(BaseTokenizer):
     """Character-level tokenizer skeleton.
-
-    TODO(student): build a vocabulary from characters in `texts`, reserve ids
     for special tokens if you use them, and implement encode/decode.
     """
 
@@ -32,17 +30,23 @@ class CharTokenizer(BaseTokenizer):
         self.itos: dict[int, str] = {}
 
     def train(self, texts: list[str]) -> None:
-        ...
+        unique_chars = set()
+        for text in texts:
+            unique_chars.update(text)
+        sorted_chars = sorted(unique_chars)
+        self.stoi = {char:idx for idx, char in enumerate(sorted_chars)}
+        self.itos = {idx:char for idx, char in enumerate(sorted_chars)}
+
 
     def encode(self, text: str) -> list[int]:
-        ...
+        return [self.stoi[char] for char in text]
 
     def decode(self, ids: list[int]) -> str:
-        ...
+        return "".join(self.itos[id] for id in ids)
 
     @property
     def vocab_size(self) -> int:
-        ...
+        return len(self.itos)
 
 
 class HFTokenizerWrapper(BaseTokenizer):
