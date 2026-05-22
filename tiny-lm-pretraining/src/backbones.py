@@ -37,14 +37,38 @@ class TransformerBlock(nn.Module):
 
     def __init__(self, d_model: int, num_heads: int, dropout: float = 0.1) -> None:
         super().__init__()
-        self.ln_1 = ...
-        self.attn = ...
-        self.ln_2 = ...
-        self.mlp = ...
-        self.dropout = ...
+        self.ln_1 = nn.LayerNorm(d_model)
+        self.attn = nn.MultiheadAttention(
+            embed_dim=d_model,
+            num_heads=num_heads,
+            dropout=dropout,
+            batch_first=True,
+        )
+        self.ln_2 = nn.LayerNorm(d_model)
+        self.mlp = nn.Sequential(
+            nn.Linear(d_model, 4 * d_model),
+            nn.GELU(),
+            nn.Dropout(dropout),
+            nn.Linear(4 * d_model, d_model),
+            nn.Dropout(dropout),
+        )
+        self.dropout = nn.Dropout(dropout)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        ...
+        normed = self.ln_1(x)
+        T = normed.size(1)
+        causal_mask = torch.triu(
+            torch.ones(T, T, device=x.device, dtype=torch.bool),
+            diagonal=1,
+        )
+        attn_out, _ = self.attn(normed, normed, normed, attn_mask=causal_mask)
+        x = x + self.dropout(attn_out)
+
+        normed = self.ln_2(x)
+        mlp_out = self.mlp(normed)
+        x = x + self.dropout(mlp_out)
+
+        return x
 
 
 class TransformerBackbone(nn.Module):
