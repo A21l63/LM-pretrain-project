@@ -87,9 +87,19 @@ class TransformerBackbone(nn.Module):
     ) -> None:
         super().__init__()
         self.block_size = block_size
-        self.position_embedding = ...
-        self.blocks = ...
-        self.final_ln = ...
+        self.position_embedding = nn.Embedding(block_size, d_model)
+        self.blocks = nn.ModuleList(
+            [TransformerBlock(d_model, num_heads, dropout) for _ in range(num_layers)]
+        )
+        self.final_ln = nn.LayerNorm(d_model)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        ...
+        B, T, _ = x.shape
+        pos = torch.arange(T, device=x.device).unsqueeze(0)
+        pos_emb = self.position_embedding(pos)
+        x = x + pos_emb
+
+        for block in self.blocks:
+            x = block(x)
+
+        return self.final_ln(x)
