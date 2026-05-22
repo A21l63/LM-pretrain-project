@@ -1,8 +1,10 @@
+from __future__ import annotations
+"""Shared language model interface for GRU and Transformer experiments."""
 from wsgiref.util import request_uri
 
--"""Shared language model interface for GRU and Transformer experiments."""
 
-from __future__ import annotations
+
+
 
 import torch
 import torch.nn.functional as F

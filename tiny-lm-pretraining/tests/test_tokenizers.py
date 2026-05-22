@@ -12,7 +12,6 @@ def test_char_tokenizer_roundtrip() -> None:
     assert tokenizer.decode(tokenizer.encode(text)) == text
 
 
-@pytest.mark.skip(reason="TODO(student): implement CharTokenizer.vocab_size first")
 def test_char_tokenizer_vocab_size() -> None:
     tokenizer = CharTokenizer()
     tokenizer.train(["ab", "bc"])
