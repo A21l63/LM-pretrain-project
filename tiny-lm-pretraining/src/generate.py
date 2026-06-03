@@ -18,7 +18,7 @@ def generate_text(
         model: torch.nn.Module,
         tokenizer,
         prompt: str,
-        max_new_tokens: int = 100,
+        max_tokens: int = 100,
         temperature: float = 1.0,
         top_k: int | None = None,
         device: torch.device | None = None,
@@ -29,15 +29,14 @@ def generate_text(
     input_ids = tokenizer.encode(prompt)
     generated = torch.tensor(input_ids, dtype=torch.long, device=device).unsqueeze(0)
 
-    block_size = model.block_size
     eos_token_id = getattr(tokenizer, 'eos_token_id', None)
 
     model.eval()
     with torch.no_grad():
-        for _ in range(max_new_tokens):
-            context = generated[:, -block_size:]
+        for _ in range(max_tokens):
+            context = generated[:, :]
 
-            logits = model(context)
+            logits, _ = model(context)
             next_logits = logits[0, -1, :]
 
             if temperature > 0:

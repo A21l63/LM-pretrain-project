@@ -3,24 +3,25 @@ seed: 42
 data:
   dataset_name: roneneldan/TinyStories
   text_column: text
-  max_texts: 2000
+  max_texts: 50000
   validation_fraction: 0.1
 tokenizer:
   type: char
 model:
   type: gru
   block_size: 128
-  d_model: 128
-  gru_hidden_size: 128
-  num_layers: 1
+  d_model: 256
+  gru_hidden_size: 512
+  num_layers: 4
   dropout: 0.1
 training:
   batch_size: 32
-  max_steps: 1000
+  max_steps: 30000
   learning_rate: 0.0003
   eval_interval: 100
   grad_clip: 1.0
-  checkpoint_path: results/char_gru.pt
+  checkpoint_dir: results/char_gru.pt
+  device: cuda
 generation:
   prompt: "Once upon a time"
   max_new_tokens: 120

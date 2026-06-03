@@ -2,6 +2,14 @@
 
 from __future__ import annotations
 
+from transformers import AutoTokenizer
+
+
+def get_gpt2_tokenizer():
+    tokenizer = AutoTokenizer.from_pretrained("gpt2")
+    tokenizer.pad_token = tokenizer.eos_token
+
+    return tokenizer
 
 class BaseTokenizer:
     """Common tokenizer interface used by all experiments."""
@@ -52,23 +60,26 @@ class CharTokenizer(BaseTokenizer):
 class HFTokenizerWrapper(BaseTokenizer):
     """Optional wrapper around a pretrained Hugging Face tokenizer.
 
-    TODO(student): instantiate AutoTokenizer and map its encode/decode methods
-    to the BaseTokenizer interface. Do not train a large tokenizer here.
+    Instantiates AutoTokenizer and maps its encode/decode methods
+    to the BaseTokenizer interface.
     """
 
     def __init__(self, name: str = "gpt2") -> None:
         self.name = name
-        self.tokenizer = None
+        self.tokenizer = AutoTokenizer.from_pretrained(name)
+
+        if self.tokenizer.pad_token is None:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
 
     def train(self, texts: list[str]) -> None:
-        ...
+        pass
 
     def encode(self, text: str) -> list[int]:
-        ...
+        return self.tokenizer.encode(text)
 
     def decode(self, ids: list[int]) -> str:
-        ...
+        return self.tokenizer.decode(ids)
 
     @property
     def vocab_size(self) -> int:
-        ...
+        return self.tokenizer.vocab_size

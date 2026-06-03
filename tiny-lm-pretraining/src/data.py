@@ -5,7 +5,6 @@ from __future__ import annotations
 import torch
 from torch.utils.data import Dataset
 
-
 class LMDataset(Dataset):
     """A dataset that returns shifted input/target token blocks.
 
@@ -25,7 +24,6 @@ class LMDataset(Dataset):
         x = self.token_ids[idx: idx + self.block_size]
         y = self.token_ids[idx + 1: idx + self.block_size + 1]
         return torch.tensor(x, dtype=torch.long), torch.tensor(y, dtype=torch.long)
-
 
 def split_token_ids(
     token_ids: list[int], validation_fraction: float = 0.1

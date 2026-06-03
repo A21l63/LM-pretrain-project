@@ -10,13 +10,13 @@ tokenizer:
   name: gpt2
 model:
   type: gru
-  block_size: 128
-  d_model: 128
-  gru_hidden_size: 256
-  num_layers: 1
+  block_size: 256
+  d_model: 256
+  gru_hidden_size: 512
+  num_layers: 3
   dropout: 0.1
 training:
-  batch_size: 16
+  batch_size: 32
   max_steps: 1000
   learning_rate: 0.0003
   eval_interval: 100

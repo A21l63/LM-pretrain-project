@@ -126,7 +126,7 @@ class GRULanguageModel(BaseLanguageModel):
 
     def build_backbone(self) -> nn.Module:
         return GRUBackbone(
-            input_size = self.d_model,
+            d_model = self.d_model,
             hidden_size = self.hidden_size,
             num_layers = self.num_layers,
             dropout = self.dropout
@@ -156,5 +156,6 @@ class TransformerLanguageModel(BaseLanguageModel):
             d_model = self.d_model,
             num_heads = self.num_heads,
             num_layers = self.num_layers,
-            dropout = self.dropout
+            dropout = self.dropout,
+            block_size = self.block_size
         )
